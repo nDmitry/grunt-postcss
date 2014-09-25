@@ -1,0 +1,44 @@
+{
+  "name": "grunt-postcss",
+  "version": "0.1.0",
+  "description": "Apply several post-processors to your CSS using PostCSS",
+  "author": {
+    "name": "Dmitry Nikitenko",
+    "email": "dima.nikitenko@gmail.com"
+  },
+  "repository": "nDmitry/grunt-postcss",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "keywords": [
+    "gruntplugin",
+    "css",
+    "postprocessor",
+    "postcss"
+  ],
+  "files": [
+    "tasks",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "diff": "^1.0.8",
+    "postcss": "^2.2.5"
+  },
+  "devDependencies": {
+    "csswring": "^1.3.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-nodeunit": "^0.4.0",
+    "load-grunt-tasks": "^0.6.0",
+    "time-grunt": "^1.0.0"
+  },
+  "peerDependencies": {
+    "grunt": "^0.4.5"
+  }
+}
