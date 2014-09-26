@@ -38,7 +38,7 @@ grunt.initConfig({
 });
 ```
 
-The usage and options are similar with [grunt-autoprefixer](https://github.com/nDmitry/grunt-autoprefixer#options). The only new options is:
+The usage and options are similar with [grunt-autoprefixer](https://github.com/nDmitry/grunt-autoprefixer#options). The only new option is:
 
 #### options.processors
 Type: `Array`
