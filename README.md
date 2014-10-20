@@ -21,6 +21,10 @@ grunt.loadNpmTasks('grunt-postcss');
 
 ## Usage
 
+```
+$ npm install grunt-postcss autoprefixer-core csswring
+```
+
 ```js
 grunt.initConfig({
   postcss: {
@@ -38,7 +42,7 @@ grunt.initConfig({
 });
 ```
 
-The usage and options are similar with [grunt-autoprefixer](https://github.com/nDmitry/grunt-autoprefixer#options). The only new option is:
+The usage and options are similar with [grunt-autoprefixer](https://github.com/nDmitry/grunt-autoprefixer#options) (except `browsers` option). The only new option is:
 
 #### options.processors
 Type: `Array`
