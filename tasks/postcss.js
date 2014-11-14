@@ -35,9 +35,9 @@ module.exports = function(grunt) {
         return processor.process(input, {
             map: (typeof options.map === 'boolean') ? options.map : {
                 prev: getPrevMap(from),
-                inline: options.map.inline,
-                annotation: options.map.annotation,
-                sourcesContent: options.map.sourcesContent
+                inline: (typeof options.map.inline === 'boolean') ? options.map.inline : true,
+                annotation: (typeof options.map.annotation === 'boolean') ? options.map.annotation : true,
+                sourcesContent: (typeof options.map.sourcesContent === 'boolean') ? options.map.sourcesContent : true
             },
             from: from,
             to: to

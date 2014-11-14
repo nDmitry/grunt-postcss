@@ -24,7 +24,9 @@ module.exports = function(grunt) {
         postcss: {
             dist: {
                 options: {
-                    map: true,
+                    map: {
+                        inline: false
+                    },
                     processors: [require('csswring').postcss]
                 },
                 src: 'test/fixtures/a.css',

@@ -1,4 +1,9 @@
+v0.2.0:
+    date: 2014-11-14
+    changes:
+      - PostCSS 3.0
+      - Maps now inline and containing sourcesContent by default
 v0.1.0:
-    data: 2014-09-25
+    date: 2014-09-25
     changes:
       - First release
