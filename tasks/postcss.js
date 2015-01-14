@@ -8,7 +8,7 @@ var chalk = require('chalk');
 module.exports = function(grunt) {
 
     var options;
-    var processor = postcss();
+    var processor;
 
     /**
      * Returns an input map contents if a custom map path was specified
@@ -54,6 +54,8 @@ module.exports = function(grunt) {
     }
 
     grunt.registerMultiTask('postcss', 'Process CSS files.', function() {
+        processor = postcss();
+
         options = this.options({
             diff: false,
             map: false,
