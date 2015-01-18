@@ -1,3 +1,8 @@
+v0.3.0:
+    date: 2015-01-18
+    changes:
+      - PostCSS 4.0
+      - Use a new PostCSS instance for each Grunt target (#12)
 v0.2.0:
     date: 2014-11-14
     changes:
