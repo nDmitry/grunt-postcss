@@ -1,1 +1,1 @@
-{"version":3,"sources":["../test/fixtures/a.css"],"names":[],"mappings":"AAAA,EACI,WAAY,CACf","file":"a.css","sourcesContent":["a {\n    color: blue;\n}\n"]}
+{"version":3,"sources":["../test/fixtures/a.css"],"names":[],"mappings":"AAAA,EACI,UAAY,CACf","file":"a.css","sourcesContent":["a {\n    color: blue;\n}\n"]}
