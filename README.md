@@ -42,13 +42,13 @@ grunt.initConfig({
 });
 ```
 
+The usage and options are similar with [grunt-autoprefixer](https://github.com/nDmitry/grunt-autoprefixer#options) (except `browsers` option). The only new option is:
+
 #### Plugin specific options
 
 ```js
 require('postcss-plugin')({option: value}).postcss
 ```
-
-The usage and options are similar with [grunt-autoprefixer](https://github.com/nDmitry/grunt-autoprefixer#options) (except `browsers` option). The only new option is:
 
 #### options.processors
 Type: `Array`
