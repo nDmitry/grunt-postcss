@@ -42,6 +42,20 @@ grunt.initConfig({
 });
 ```
 
+## Using plugin options
+
+```js
+grunt.initConfig({
+  postcss: {
+    options: {
+      processors: [
+        require('postcss-plugin')({option: value}).postcss,
+      ]
+    },
+  }
+});
+```
+
 The usage and options are similar with [grunt-autoprefixer](https://github.com/nDmitry/grunt-autoprefixer#options) (except `browsers` option). The only new option is:
 
 #### options.processors
