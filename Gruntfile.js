@@ -27,7 +27,10 @@ module.exports = function(grunt) {
                     map: {
                         inline: false
                     },
-                    processors: [require('csswring').postcss]
+                    processors: [
+                        require('csswring').postcss,
+                        require('./test/plugin').postcss
+                    ]
                 },
                 src: 'test/fixtures/a.css',
                 dest: 'tmp/a.css'

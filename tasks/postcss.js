@@ -78,6 +78,10 @@ module.exports = function(grunt) {
                 var dest = f.dest || filepath;
                 var input = grunt.file.read(filepath);
                 process(input, filepath, dest).then(function (result) {
+                    result.warnings().forEach(function (msg) {
+                        grunt.log.error(msg.toString());
+                    });
+
                     grunt.file.write(dest, result.css);
                     log('File ' + chalk.cyan(dest) + ' created.');
 
