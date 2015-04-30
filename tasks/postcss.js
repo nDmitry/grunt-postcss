@@ -4,6 +4,7 @@ var path = require('path');
 var postcss = require('postcss');
 var diff = require('diff');
 var chalk = require('chalk');
+var CssSyntaxError = require('postcss/lib/css-syntax-error');
 
 module.exports = function(grunt) {
 
@@ -100,6 +101,12 @@ module.exports = function(grunt) {
                     finished += 1;
                     if (finished === processed) {
                         done();
+                    }
+                }).catch(function (error) {
+                    if ( error instanceof CssSyntaxError ) {
+                        grunt.fatal(error.message + error.showSourceCode());
+                    } else {
+                        grunt.fatal(error);
                     }
                 });
             });
