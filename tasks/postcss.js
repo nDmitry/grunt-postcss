@@ -65,32 +65,40 @@ module.exports = function(grunt) {
 
         options.processors.forEach(processor.use.bind(processor));
 
+        var done = this.async();
+        var finished = 0;
+        var processed = this.files.length;
+
         this.files.forEach(function(f) {
             if (!f.src.length) {
                 return grunt.fail.warn('No source files were found.');
             }
 
-            f.src
-                .forEach(function(filepath) {
-                    var dest = f.dest || filepath;
-                    var input = grunt.file.read(filepath);
-                    var output = process(input, filepath, dest);
-
-                    grunt.file.write(dest, output.css);
+            f.src.forEach(function(filepath) {
+                var dest = f.dest || filepath;
+                var input = grunt.file.read(filepath);
+                process(input, filepath, dest).then(function (result) {
+                    grunt.file.write(dest, result.css);
                     log('File ' + chalk.cyan(dest) + ' created.');
 
-                    if (output.map) {
-                        grunt.file.write(dest + '.map', output.map.toString());
+                    if (result.map) {
+                        grunt.file.write(dest + '.map', result.map.toString());
                         log('File ' + chalk.cyan(dest + '.map') + ' created (source map).');
                     }
 
                     if (options.diff) {
                         var diffPath = (typeof options.diff === 'string') ? options.diff : dest + '.diff';
 
-                        grunt.file.write(diffPath, diff.createPatch(dest, input, output.css));
+                        grunt.file.write(diffPath, diff.createPatch(dest, input, result.css));
                         log('File ' + chalk.cyan(diffPath) + ' created (diff).');
                     }
+
+                    finished += 1;
+                    if (finished === processed) {
+                        done();
+                    }
                 });
+            });
         });
     });
 };
