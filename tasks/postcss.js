@@ -55,8 +55,6 @@ module.exports = function(grunt) {
     }
 
     grunt.registerMultiTask('postcss', 'Process CSS files.', function() {
-        processor = postcss();
-
         options = this.options({
             diff: false,
             map: false,
@@ -64,7 +62,7 @@ module.exports = function(grunt) {
             silent: false
         });
 
-        options.processors.forEach(processor.use.bind(processor));
+        processor = postcss(options.processors);
 
         var done = this.async();
         var finished = 0;
