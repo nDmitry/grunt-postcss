@@ -16,7 +16,7 @@
   },
   "keywords": [
     "gruntplugin",
-    "postcssrunner",
+    "postcss-runner",
     "css",
     "postprocessor",
     "postcss"
