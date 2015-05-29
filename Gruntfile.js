@@ -28,8 +28,8 @@ module.exports = function(grunt) {
                         inline: false
                     },
                     processors: [
-                        require('csswring').postcss,
-                        require('./test/plugin').postcss
+                        require('csswring'),
+                        require('./test/plugin')
                     ]
                 },
                 src: 'test/fixtures/a.css',

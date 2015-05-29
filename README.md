@@ -31,8 +31,8 @@ grunt.initConfig({
     options: {
       map: true,
       processors: [
-        require('autoprefixer-core')({browsers: 'last 1 version'}).postcss,
-        require('csswring').postcss
+        require('autoprefixer-core')({browsers: 'last 1 version'}),
+        require('csswring')
       ]
     },
     dist: {
@@ -47,7 +47,7 @@ The usage and options are similar with [grunt-autoprefixer](https://github.com/n
 #### Plugin specific options
 
 ```js
-require('postcss-plugin')({option: value}).postcss
+require('postcss-plugin')({option: value})
 ```
 
 #### options.processors
