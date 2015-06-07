@@ -74,7 +74,7 @@ module.exports = function(grunt) {
 
         this.files.forEach(function(f) {
             if (!f.src.length) {
-                return grunt.fail.warn('No source files were found.');
+                return grunt.log.error('No source files were found.');
             }
 
             f.src.forEach(function(filepath) {
