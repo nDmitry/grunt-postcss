@@ -40,7 +40,8 @@ module.exports = function(grunt) {
                 sourcesContent: (typeof options.map.sourcesContent === 'boolean') ? options.map.sourcesContent : true
             },
             from: from,
-            to: to
+            to: to,
+            safe: options.safe
         });
     }
 
@@ -55,10 +56,11 @@ module.exports = function(grunt) {
 
     grunt.registerMultiTask('postcss', 'Process CSS files.', function() {
         options = this.options({
-            diff: false,
-            map: false,
             processors: [],
-            silent: false
+            map: false,
+            diff: false,
+            silent: false,
+            safe: false
         });
 
         processor = postcss(options.processors);
