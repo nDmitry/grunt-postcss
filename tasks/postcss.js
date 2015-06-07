@@ -49,9 +49,7 @@ module.exports = function(grunt) {
      * @param {string} msg Log message
      */
     function log(msg) {
-        if (!options.silent) {
-            grunt.log.writeln(msg);
-        }
+        grunt.verbose.writeln(msg);
     }
 
     grunt.registerMultiTask('postcss', 'Process CSS files.', function() {
@@ -59,9 +57,14 @@ module.exports = function(grunt) {
             processors: [],
             map: false,
             diff: false,
-            silent: false,
             safe: false
         });
+
+        var tally = {
+            sheets: 0,
+            maps: 0,
+            diffs: 0
+        };
 
         processor = postcss(options.processors);
 
@@ -77,6 +80,7 @@ module.exports = function(grunt) {
             f.src.forEach(function(filepath) {
                 var dest = f.dest || filepath;
                 var input = grunt.file.read(filepath);
+
                 process(input, filepath, dest).then(function (result) {
                     result.warnings().forEach(function (msg) {
                         grunt.log.error(msg.toString());
@@ -84,10 +88,12 @@ module.exports = function(grunt) {
 
                     grunt.file.write(dest, result.css);
                     log('File ' + chalk.cyan(dest) + ' created.');
+                    tally.sheets += 1;
 
                     if (result.map) {
                         grunt.file.write(dest + '.map', result.map.toString());
                         log('File ' + chalk.cyan(dest + '.map') + ' created (source map).');
+                        tally.maps += 1;
                     }
 
                     if (options.diff) {
@@ -95,10 +101,24 @@ module.exports = function(grunt) {
 
                         grunt.file.write(diffPath, diff.createPatch(dest, input, result.css));
                         log('File ' + chalk.cyan(diffPath) + ' created (diff).');
+                        tally.diffs += 1;
                     }
 
                     finished += 1;
+
                     if (finished === processed) {
+                        if (tally.sheets) {
+                            grunt.log.ok(tally.sheets + ' ' + 'processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
+                        }
+
+                        if (tally.maps) {
+                            grunt.log.ok(tally.maps + ' ' + grunt.util.pluralize(tally.maps, 'sourcemap/sourcemaps') + ' created.');
+                        }
+
+                        if (tally.diffs) {
+                            grunt.log.ok(tally.diffs + ' ' + grunt.util.pluralize(tally.diffs, 'diff/diffs') + ' created.');
+                        }
+
                         done();
                     }
                 }).catch(function (error) {
