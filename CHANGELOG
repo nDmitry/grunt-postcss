@@ -1,3 +1,7 @@
+v0.5.1
+    date: 2015-06-10
+    changes:
+      - Fix process hanging when no source files found
 v0.5.0
     date: 2015-06-07
     changes:
