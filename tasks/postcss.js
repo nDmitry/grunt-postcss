@@ -26,6 +26,32 @@ module.exports = function(grunt) {
     }
 
     /**
+     * @param {string} to Output CSS path
+     * @returns {string}
+     */
+    function getSourcemapPath(to) {
+        return path.join(options.map.annotation, path.basename(to)) + '.map';
+    }
+
+    /**
+     * @param {string} to Output CSS path
+     * @returns {boolean|string}
+     */
+    function getAnnotation(to) {
+        var annotation = true;
+
+        if (typeof options.map.annotation === 'boolean') {
+            annotation = options.map.annotation;
+        }
+
+        if (typeof options.map.annotation === 'string') {
+            annotation = getSourcemapPath(to);
+        }
+
+        return annotation;
+    }
+
+    /**
      * @param {string} input Input CSS contents
      * @param {string} from Input CSS path
      * @param {string} to Output CSS path
@@ -36,7 +62,7 @@ module.exports = function(grunt) {
             map: (typeof options.map === 'boolean') ? options.map : {
                 prev: getPrevMap(from),
                 inline: (typeof options.map.inline === 'boolean') ? options.map.inline : true,
-                annotation: (typeof options.map.annotation === 'boolean' || typeof options.map.annotation === 'string') ? options.map.annotation : true,
+                annotation: getAnnotation(to),
                 sourcesContent: (typeof options.map.sourcesContent === 'boolean') ? options.map.sourcesContent : true
             },
             from: from,
@@ -107,7 +133,13 @@ module.exports = function(grunt) {
                     tally.sheets += 1;
 
                     if (result.map) {
-                        grunt.file.write(dest + '.map', result.map.toString());
+                        var mapDest = dest + '.map';
+
+                        if (typeof options.map.annotation === 'string') {
+                            mapDest = getSourcemapPath(dest);
+                        }
+
+                        grunt.file.write(mapDest, result.map.toString());
                         log('File ' + chalk.cyan(dest + '.map') + ' created (source map).');
                         tally.maps += 1;
                     }

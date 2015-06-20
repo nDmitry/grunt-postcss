@@ -29,7 +29,14 @@ $ npm install grunt-postcss autoprefixer-core csswring
 grunt.initConfig({
   postcss: {
     options: {
-      map: true,
+      map: true, // inline sourcemaps
+
+      // or
+      map: {
+          inline: false, // save all sourcemaps as separate files...
+          annotation: 'dist/css/maps/' // ...to the specified directory
+      },
+
       processors: [
         require('pixrem')(), // add fallbacks for rem units
         require('autoprefixer-core')({browsers: 'last 2 versions'}), // add vendor prefixes
@@ -67,7 +74,7 @@ You can gain more control over sourcemap generation by assigning an object to th
 
 * `prev` (string or `false`): a path to a directory where a previous sourcemap is (e.g. `path/`). By default, PostCSS will try to find a previous sourcemap using a path from the annotation comment (or using the annotation comment itself if the map is inlined). You can also set this option to `false` to delete the previous sourcemap.
 * `inline` (boolean): whether a sourcemap will be inlined or not. By default, it will be the same as a previous sourcemap or inlined.
-* `annotation` (boolean or string): indicates that PostCSS should add annotation comments to the output CSS. By default, PostCSS will always add a comment with a path to a sourcemap unless it is inlined or the input CSS does not have an annotation comment. By default, PostCSS presumes that you want to save sourcemaps next to your output CSS files, but you can ovverride this behavior and set another path as a string value for the option.
+* `annotation` (boolean or string): by default, PostCSS will always add annotation comments with a path to a sourcemap file unless it is inlined or the input CSS does not have an annotation comment. PostCSS presumes that you want to save sourcemaps next to your output CSS files, but you can override this behavior and set a path to a directory as a string value for the option.
 * `sourcesContent` (boolean): whether original file contents (e.g. Sass sources) will be included to a sourcemap. By default, it's `true` unless a sourcemap from a previous compilation step has the original contents missing.
 
 #### options.diff
