@@ -1,3 +1,7 @@
+v0.5.2
+    date: 2015-06-20
+    changes:
+      - Fix `annotation` option
 v0.5.1
     date: 2015-06-10
     changes:
