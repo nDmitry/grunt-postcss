@@ -30,7 +30,11 @@ module.exports = function(grunt) {
      * @returns {string}
      */
     function getSourcemapPath(to) {
-        return path.join(options.map.annotation, path.basename(to)) + '.map';
+        if (options.map.annotation.match(/[\/\\]$/)) {
+            return path.join(options.map.annotation, path.basename(to)) + '.map';
+        } else {
+            return options.map.annotation;
+        }
     }
 
     /**
@@ -136,7 +140,7 @@ module.exports = function(grunt) {
                         var mapDest = dest + '.map';
 
                         if (typeof options.map.annotation === 'string') {
-                            mapDest = getSourcemapPath(dest);
+                            mapDest = path.join(path.dirname(dest), getSourcemapPath(dest));
                         }
 
                         grunt.file.write(mapDest, result.map.toString());
