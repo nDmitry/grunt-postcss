@@ -22,7 +22,7 @@ grunt.loadNpmTasks('grunt-postcss');
 ## Usage
 
 ```
-$ npm install grunt-postcss autoprefixer-core csswring
+$ npm install grunt-postcss pixrem autoprefixer-core cssnano
 ```
 
 ```js
