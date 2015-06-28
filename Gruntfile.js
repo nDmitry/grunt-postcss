@@ -1,7 +1,8 @@
+var processors = [
+    require('csswring')
+];
+
 module.exports = function(grunt) {
-
-    'use strict';
-
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
 
@@ -22,18 +23,49 @@ module.exports = function(grunt) {
         },
 
         postcss: {
-            dist: {
+            defaults: {
+                options: {
+                    processors: processors
+                },
+                src: 'test/fixtures/a.css',
+                dest: 'tmp/defaults.css'
+            },
+            mapInline: {
+                options: {
+                    map: true,
+                    processors: processors
+                },
+                src: 'test/fixtures/a.css',
+                dest: 'tmp/mapInline.css'
+            },
+            mapSeparate: {
                 options: {
                     map: {
                         inline: false
                     },
-                    processors: [
-                        require('csswring'),
-                        require('./test/plugin')
-                    ]
+                    processors: processors
                 },
                 src: 'test/fixtures/a.css',
-                dest: 'tmp/a.css'
+                dest: 'tmp/mapSeparate.css'
+            },
+            mapAnnotationPath: {
+                options: {
+                    map: {
+                        inline: false,
+                        annotation: 'tmp/maps/'
+                    },
+                    processors: processors
+                },
+                src: 'test/fixtures/a.css',
+                dest: 'tmp/mapAnnotationPath.css'
+            },
+            diff: {
+                options: {
+                    diff: true,
+                    processors: processors
+                },
+                src: 'test/fixtures/a.css',
+                dest: 'tmp/diff.css'
             },
         },
 
