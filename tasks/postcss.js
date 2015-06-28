@@ -45,7 +45,7 @@ module.exports = function(grunt) {
         }
 
         if (typeof options.map.annotation === 'string') {
-            annotation = path.relative(path.dirname(to), getSourcemapPath(to));
+            annotation = path.relative(path.dirname(to), getSourcemapPath(to)).replace(/\\/g, '/');
         }
 
         return annotation;
