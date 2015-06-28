@@ -1,6 +1,6 @@
 {
   "name": "grunt-postcss",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Apply several post-processors to your CSS using PostCSS",
   "author": {
     "name": "Dmitry Nikitenko",

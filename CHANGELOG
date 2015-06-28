@@ -1,3 +1,7 @@
+v0.5.4
+    date: 2015-06-28
+    changes:
+      - Fix annotation URL for Windows
 v0.5.3
     date: 2015-06-25
     changes:
