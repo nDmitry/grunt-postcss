@@ -4,6 +4,7 @@ var path = require('path');
 var postcss = require('postcss');
 var diff = require('diff');
 var chalk = require('chalk');
+var BPromise = require('bluebird');
 
 module.exports = function(grunt) {
 
@@ -95,12 +96,12 @@ module.exports = function(grunt) {
         processor = postcss(options.processors);
 
         var done = this.async();
-        var finished = 0;
-        var processed = this.files.length;
 
         if (!this.files.length) {
-            done();
+            return done();
         }
+
+        var tasks = [];
 
         this.files.forEach(function(f) {
             var src = f.src.filter(function(filepath) {
@@ -119,11 +120,11 @@ module.exports = function(grunt) {
                 return done();
             }
 
-            src.forEach(function(filepath) {
+            tasks = src.map(function(filepath) {
                 var dest = f.dest || filepath;
                 var input = grunt.file.read(filepath);
 
-                process(input, filepath, dest).then(function(result) {
+                return process(input, filepath, dest).then(function(result) {
                     result.warnings().forEach(function(msg) {
                         grunt.log.error(msg.toString());
                     });
@@ -151,32 +152,32 @@ module.exports = function(grunt) {
                         log('File ' + chalk.cyan(diffPath) + ' created (diff).');
                         tally.diffs += 1;
                     }
-
-                    finished += 1;
-
-                    if (finished === processed) {
-                        if (tally.sheets) {
-                            grunt.log.ok(tally.sheets + ' ' + 'processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
-                        }
-
-                        if (tally.maps) {
-                            grunt.log.ok(tally.maps + ' ' + grunt.util.pluralize(tally.maps, 'sourcemap/sourcemaps') + ' created.');
-                        }
-
-                        if (tally.diffs) {
-                            grunt.log.ok(tally.diffs + ' ' + grunt.util.pluralize(tally.diffs, 'diff/diffs') + ' created.');
-                        }
-
-                        done();
-                    }
-                }).catch(function(error) {
-                    if (error.name === 'CssSyntaxError') {
-                        grunt.fatal(error.message + error.showSourceCode());
-                    } else {
-                        grunt.fatal(error);
-                    }
                 });
             });
+        });
+
+        BPromise.all(tasks).then(function() {
+            if (tally.sheets) {
+                grunt.log.ok(tally.sheets + ' ' + 'processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
+            }
+
+            if (tally.maps) {
+                grunt.log.ok(tally.maps + ' ' + grunt.util.pluralize(tally.maps, 'sourcemap/sourcemaps') + ' created.');
+            }
+
+            if (tally.diffs) {
+                grunt.log.ok(tally.diffs + ' ' + grunt.util.pluralize(tally.diffs, 'diff/diffs') + ' created.');
+            }
+
+            done();
+        }).catch(function(error) {
+            if (error.name === 'CssSyntaxError') {
+                grunt.fatal(error.message + error.showSourceCode());
+            } else {
+                grunt.fatal(error);
+            }
+
+            done(error);
         });
     });
 };

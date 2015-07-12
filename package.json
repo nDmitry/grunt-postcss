@@ -26,6 +26,7 @@
     "LICENSE"
   ],
   "dependencies": {
+    "bluebird": "^2.9.33",
     "chalk": "^1.0.0",
     "diff": "^1.3.2",
     "postcss": "^4.1.8"
