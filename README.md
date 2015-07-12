@@ -50,11 +50,15 @@ grunt.initConfig({
 });
 ```
 
-#### Plugin specific options
+## Options
+
+### Post-processors options
 
 ```js
 require('postcss-plugin')({option: value})
 ```
+
+### Plugin options
 
 #### options.processors
 Type: `Array`
