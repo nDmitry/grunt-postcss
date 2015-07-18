@@ -109,3 +109,44 @@ options: {
 ## Why would I use this?
 
 Unlike the traditional approach with separate plugins, grunt-postcss allows you to parse and save CSS only once applying all post-processors in memory and thus reducing your build time. PostCSS is also a simple tool for writing your own CSS post-processors.
+
+## How to migrate from grunt-autoprefixer?
+
+Autoprefixer is a PostCSS plugin, so first replace `grunt-autoprefixer` with `grunt-postcss` and `autoprefixer-core` plugin.
+
+```
+$ npm remove --save-dev grunt-autoprefixer
+$ npm install --save-dev grunt-postcss autoprefixer-core
+```
+
+Assuming you have a config like this:
+
+```
+autoprefixer: {
+  options: {
+    map: true,
+    browsers: ['last 1 version']
+  },
+  dist: {
+    src: '...'
+  }
+}
+```
+
+Replace it with:
+
+```
+postcss: {
+  options: {
+    map: true,
+    processors: [
+      require('autoprefixer-core')({browsers: ['last 1 version']})
+    ]
+  },
+  dist: {
+    src: '...'
+  }
+}
+```
+
+`browsers`, `cascade` and `remove` options are plugin-specific, so we pass them as an argument while require the plugin.
