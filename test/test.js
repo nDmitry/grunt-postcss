@@ -103,14 +103,14 @@ exports.gruntPostcss = {
 
     syntax: function(test) {
         var actual = {
-            css: grunt.file.read('tmp/syntax.css'),
+            scss: grunt.file.read('tmp/syntax.scss'),
         };
 
         var expected = {
-            css: grunt.file.read('test/expected/syntax.css'),
+            scss: grunt.file.read('test/expected/syntax.scss'),
         };
 
-        test.strictEqual(actual.css, expected.css);
+        test.strictEqual(actual.scss, expected.scss);
         test.done();
     },
 };

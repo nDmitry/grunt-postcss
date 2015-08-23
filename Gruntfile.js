@@ -70,10 +70,10 @@ module.exports = function(grunt) {
             syntax: {
                 options: {
                     syntax: require('postcss-scss'),
-                    processors: processors
+                    processors: []
                 },
                 src: 'test/fixtures/a.scss',
-                dest: 'tmp/syntax.css'
+                dest: 'tmp/syntax.scss'
             },
         },
 
