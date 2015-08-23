@@ -94,15 +94,19 @@ options: {
 ```
 You can also specify a path where you want the file to be saved.
 
-#### options.safe
-Type: `Boolean`
-Default value: `false`
+#### options.syntax, options.parser, options.stringifier
 
-Enable or disable [PostCSS safe mode](https://github.com/postcss/postcss#safe-mode).
+Options to control [PostCSS custom syntaxes](https://github.com/postcss/postcss#custom-syntaxes).
 
 ```js
 options: {
-  safe: true
+  parser: require('postcss-safe-parser') // instead of a removed `safe` option
+}
+```
+
+```js
+options: {
+  syntax: require('postcss-scss') // work with SCSS directly
 }
 ```
 
