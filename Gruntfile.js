@@ -1,5 +1,5 @@
 var processors = [
-    require('csswring')
+    require('cssnano')
 ];
 
 module.exports = function(grunt) {
