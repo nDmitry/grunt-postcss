@@ -67,6 +67,14 @@ module.exports = function(grunt) {
                 src: 'test/fixtures/a.css',
                 dest: 'tmp/diff.css'
             },
+            syntax: {
+                options: {
+                    syntax: require('postcss-scss'),
+                    processors: processors
+                },
+                src: 'test/fixtures/a.scss',
+                dest: 'tmp/syntax.css'
+            },
         },
 
         nodeunit: {

@@ -100,4 +100,17 @@ exports.gruntPostcss = {
         test.strictEqual(actual.map, expected.map);
         test.done();
     },
+
+    syntax: function(test) {
+        var actual = {
+            css: grunt.file.read('tmp/syntax.css'),
+        };
+
+        var expected = {
+            css: grunt.file.read('test/expected/syntax.css'),
+        };
+
+        test.strictEqual(actual.css, expected.css);
+        test.done();
+    },
 };

@@ -4,7 +4,8 @@ var path = require('path');
 var postcss = require('postcss');
 var diff = require('diff');
 var chalk = require('chalk');
-var BPromise = require('bluebird');
+
+require('es6-promise').polyfill();
 
 module.exports = function(grunt) {
 
@@ -68,7 +69,9 @@ module.exports = function(grunt) {
             },
             from: from,
             to: to,
-            safe: options.safe
+            parser: options.parser,
+            stringifier: options.stringifier,
+            syntax: options.syntax
         });
     }
 
@@ -156,7 +159,7 @@ module.exports = function(grunt) {
             });
         });
 
-        BPromise.all(tasks).then(function() {
+        Promise.all(tasks).then(function() {
             if (tally.sheets) {
                 grunt.log.ok(tally.sheets + ' ' + 'processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
             }
