@@ -22,7 +22,7 @@ grunt.loadNpmTasks('grunt-postcss');
 ## Usage
 
 ```
-$ npm install grunt-postcss pixrem autoprefixer-core cssnano
+$ npm install grunt-postcss pixrem autoprefixer cssnano
 ```
 
 ```js
@@ -39,7 +39,7 @@ grunt.initConfig({
 
       processors: [
         require('pixrem')(), // add fallbacks for rem units
-        require('autoprefixer-core')({browsers: 'last 2 versions'}), // add vendor prefixes
+        require('autoprefixer')({browsers: 'last 2 versions'}), // add vendor prefixes
         require('cssnano')() // minify the result
       ]
     },
@@ -116,11 +116,11 @@ Unlike the traditional approach with separate plugins, grunt-postcss allows you 
 
 ## How to migrate from grunt-autoprefixer?
 
-Autoprefixer is a PostCSS plugin, so first replace `grunt-autoprefixer` with `grunt-postcss` and `autoprefixer-core` plugin.
+Autoprefixer is a PostCSS plugin, so first replace `grunt-autoprefixer` with `grunt-postcss` and `autoprefixer` plugin.
 
 ```
 $ npm remove --save-dev grunt-autoprefixer
-$ npm install --save-dev grunt-postcss autoprefixer-core
+$ npm install --save-dev grunt-postcss autoprefixer
 ```
 
 Assuming you have a config like this:
@@ -144,7 +144,7 @@ postcss: {
   options: {
     map: true,
     processors: [
-      require('autoprefixer-core')({browsers: ['last 1 version']})
+      require('autoprefixer')({browsers: ['last 1 version']})
     ]
   },
   dist: {
