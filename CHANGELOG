@@ -1,3 +1,11 @@
+v0.7.0
+    date: 2015-09-25
+    changes:
+      - Chalk 1.1.1
+      - Diff 2.1.2
+      - PostCSS 5.0.8
+      - Node 0.12
+      - Remove Promise polyfill
 v0.5.5
     date: 2015-07-12
     changes:

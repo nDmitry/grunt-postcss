@@ -5,8 +5,6 @@ var postcss = require('postcss');
 var diff = require('diff');
 var chalk = require('chalk');
 
-require('es6-promise').polyfill();
-
 module.exports = function(grunt) {
 
     var options;
