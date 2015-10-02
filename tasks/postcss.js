@@ -87,13 +87,15 @@ module.exports = function(grunt) {
             processors: [],
             map: false,
             diff: false,
-            safe: false
+            safe: false,
+            failOnError: false
         });
 
         var tally = {
             sheets: 0,
             maps: 0,
-            diffs: 0
+            diffs: 0,
+            issues: 0
         };
 
         processor = postcss(options.processors);
@@ -128,7 +130,9 @@ module.exports = function(grunt) {
                 var input = grunt.file.read(filepath);
 
                 return process(input, filepath, dest).then(function(result) {
-                    result.warnings().forEach(function(msg) {
+                    var warnings = result.warnings();
+                    tally.issues += warnings.length;
+                    warnings.forEach(function(msg) {
                         grunt.log.error(msg.toString());
                     });
 
@@ -170,6 +174,14 @@ module.exports = function(grunt) {
 
             if (tally.diffs) {
                 grunt.log.ok(tally.diffs + ' ' + grunt.util.pluralize(tally.diffs, 'diff/diffs') + ' created.');
+            }
+
+            if (tally.issues) {
+                grunt.log.error(tally.issues + grunt.util.pluralize(tally.issues, 'issue/issues') + ' found.');
+                if (options.failOnError) {
+                    done(false);
+                    return;
+                }
             }
 
             done();
