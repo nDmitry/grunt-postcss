@@ -75,6 +75,22 @@ module.exports = function(grunt) {
                 src: 'test/fixtures/a.scss',
                 dest: 'tmp/syntax.scss'
             },
+            doWriteDest: {
+                options: {
+                    syntax: require('postcss-scss'),
+                    writeDest: true
+                },
+                src: 'test/fixtures/a.scss',
+                dest: 'tmp/doWriteDest.scss'
+            },
+            noWriteDest: {
+                options: {
+                    syntax: require('postcss-scss'),
+                    writeDest: false
+                },
+                src: 'test/fixtures/a.scss',
+                dest: 'tmp/noWriteDest.scss'
+            }
         },
 
         nodeunit: {

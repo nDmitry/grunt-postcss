@@ -88,7 +88,8 @@ module.exports = function(grunt) {
             map: false,
             diff: false,
             safe: false,
-            failOnError: false
+            failOnError: false,
+            writeDest: true
         });
 
         var tally = {
@@ -136,8 +137,10 @@ module.exports = function(grunt) {
                         grunt.log.error(msg.toString());
                     });
 
-                    grunt.file.write(dest, result.css);
-                    log('File ' + chalk.cyan(dest) + ' created.');
+                    if (options.writeDest) {
+                        grunt.file.write(dest, result.css);
+                        log('File ' + chalk.cyan(dest) + ' created.');
+                    }
                     tally.sheets += 1;
 
                     if (result.map) {
@@ -165,7 +168,11 @@ module.exports = function(grunt) {
 
         Promise.all(tasks).then(function() {
             if (tally.sheets) {
-                grunt.log.ok(tally.sheets + ' ' + 'processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
+                if (options.writeDest) {
+                    grunt.log.ok(tally.sheets + ' processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
+                } else {
+                    grunt.log.ok(tally.sheets + ' ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' processed, no files written.');
+                }
             }
 
             if (tally.maps) {

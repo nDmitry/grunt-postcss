@@ -113,4 +113,10 @@ exports.gruntPostcss = {
         test.strictEqual(actual.scss, expected.scss);
         test.done();
     },
+
+    writeDest: function(test) {
+        test.ok(grunt.file.exists('tmp/doWriteDest.scss'));
+        test.ok(!grunt.file.exists('tmp/noWriteDest.scss'));
+        test.done();
+    },
 };
