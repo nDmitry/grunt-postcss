@@ -94,6 +94,18 @@ options: {
 ```
 You can also specify a path where you want the file to be saved.
 
+#### options.failOnError
+Type: `Boolean`
+Default value: `false`
+
+Set it to `true` if you want grunt to exit with an error on detecting a warning or error.
+
+#### options.writeDest
+Type: `Boolean`
+Default value: `true`
+
+Set it to `false` if you do not want the destination files to be written. This does not affect the processing of the `map` and `diff` options.
+
 #### options.syntax, options.parser, options.stringifier
 
 Options to control [PostCSS custom syntaxes](https://github.com/postcss/postcss#custom-syntaxes).

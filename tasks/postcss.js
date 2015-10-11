@@ -87,13 +87,16 @@ module.exports = function(grunt) {
             processors: [],
             map: false,
             diff: false,
-            safe: false
+            safe: false,
+            failOnError: false,
+            writeDest: true
         });
 
         var tally = {
             sheets: 0,
             maps: 0,
-            diffs: 0
+            diffs: 0,
+            issues: 0
         };
 
         processor = postcss(options.processors);
@@ -128,12 +131,16 @@ module.exports = function(grunt) {
                 var input = grunt.file.read(filepath);
 
                 return process(input, filepath, dest).then(function(result) {
-                    result.warnings().forEach(function(msg) {
+                    var warnings = result.warnings();
+                    tally.issues += warnings.length;
+                    warnings.forEach(function(msg) {
                         grunt.log.error(msg.toString());
                     });
 
-                    grunt.file.write(dest, result.css);
-                    log('File ' + chalk.cyan(dest) + ' created.');
+                    if (options.writeDest) {
+                        grunt.file.write(dest, result.css);
+                        log('File ' + chalk.cyan(dest) + ' created.');
+                    }
                     tally.sheets += 1;
 
                     if (result.map) {
@@ -161,7 +168,11 @@ module.exports = function(grunt) {
 
         Promise.all(tasks).then(function() {
             if (tally.sheets) {
-                grunt.log.ok(tally.sheets + ' ' + 'processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
+                if (options.writeDest) {
+                    grunt.log.ok(tally.sheets + ' processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
+                } else {
+                    grunt.log.ok(tally.sheets + ' ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' processed, no files written.');
+                }
             }
 
             if (tally.maps) {
@@ -170,6 +181,14 @@ module.exports = function(grunt) {
 
             if (tally.diffs) {
                 grunt.log.ok(tally.diffs + ' ' + grunt.util.pluralize(tally.diffs, 'diff/diffs') + ' created.');
+            }
+
+            if (tally.issues) {
+                grunt.log.error(tally.issues + grunt.util.pluralize(tally.issues, 'issue/issues') + ' found.');
+                if (options.failOnError) {
+                    done(false);
+                    return;
+                }
             }
 
             done();
