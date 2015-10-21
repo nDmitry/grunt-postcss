@@ -184,7 +184,7 @@ module.exports = function(grunt) {
             }
 
             if (tally.issues) {
-                grunt.log.error(tally.issues + grunt.util.pluralize(tally.issues, 'issue/issues') + ' found.');
+                grunt.log.error(tally.issues + ' ' + grunt.util.pluralize(tally.issues, 'issue/issues') + ' found.');
                 if (options.failOnError) {
                     done(false);
                     return;
