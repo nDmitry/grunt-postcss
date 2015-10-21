@@ -29,7 +29,7 @@
     "chalk": "^1.0.0",
     "diff": "^2.0.2",
     "es6-promise": "^3.0.2",
-    "postcss": "^5.0.2"
+    "postcss": "^5.0.0"
   },
   "devDependencies": {
     "cssnano": "^3.3.1",
