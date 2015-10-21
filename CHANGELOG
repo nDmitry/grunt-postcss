@@ -1,3 +1,13 @@
+v0.7.0
+    date: 2015-10-21
+    changes:
+      - New `failOnError` option
+      - New `writeDest` option
+      - Better npm@3 flat dependencies compatibility
+v0.6.0
+    date: 2015-08-23
+    changes:
+      - PostCSS 5.0
 v0.5.5
     date: 2015-07-12
     changes:
