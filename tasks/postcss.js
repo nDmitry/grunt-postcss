@@ -126,7 +126,7 @@ module.exports = function(grunt) {
                 return done();
             }
 
-            tasks = src.map(function(filepath) {
+            Array.prototype.push.apply(tasks, src.map(function(filepath) {
                 var dest = f.dest || filepath;
                 var input = grunt.file.read(filepath);
 
@@ -163,7 +163,7 @@ module.exports = function(grunt) {
                         tally.diffs += 1;
                     }
                 });
-            });
+            }));
         });
 
         Promise.all(tasks).then(function() {
