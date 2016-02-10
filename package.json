@@ -9,7 +9,7 @@
   "repository": "nDmitry/grunt-postcss",
   "license": "MIT",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 0.12.0"
   },
   "scripts": {
     "test": "grunt test"
