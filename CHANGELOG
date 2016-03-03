@@ -1,3 +1,7 @@
+v0.8.0
+    date: 2016-03-03
+    changes:
+      - Drop nodejs 0.10 support
 v0.7.2
     date: 2016-02-16
     changes:
