@@ -9,7 +9,7 @@
   "repository": "nDmitry/grunt-postcss",
   "license": "MIT",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 0.12.0"
   },
   "scripts": {
     "test": "grunt test"
@@ -28,7 +28,6 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "diff": "^2.0.2",
-    "es6-promise": "^3.0.2",
     "postcss": "^5.0.0"
   },
   "devDependencies": {
