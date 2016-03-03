@@ -1,4 +1,5 @@
 # grunt-postcss
+[![NPM Version](https://img.shields.io/npm/v/grunt-postcss.svg?style=flat)](https://npmjs.org/package/grunt-postcss)
 [![Build Status](https://travis-ci.org/nDmitry/grunt-postcss.png?branch=master)](https://travis-ci.org/nDmitry/grunt-postcss)
 [![Dependency Status](https://david-dm.org/nDmitry/grunt-postcss.png)](https://david-dm.org/nDmitry/grunt-postcss)
 
