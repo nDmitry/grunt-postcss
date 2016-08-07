@@ -97,7 +97,11 @@ module.exports = function(grunt) {
             issues: 0
         };
 
-        processor = postcss(options.processors);
+        if (typeof options.processor === 'function') {
+            processor = postcss(options.processors.call());
+        } else {
+            processor = postcss(options.processors);
+        }
 
         var done = this.async();
 

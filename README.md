@@ -62,10 +62,10 @@ require('postcss-plugin')({option: value})
 ### Plugin options
 
 #### options.processors
-Type: `Array`
+Type: `Array|Function`
 Default value: `[]`
 
-An array of PostCSS compatible post-processors.
+An array of PostCSS compatible post-processors. You can also use a function that returns an array of PostCSS post-processors.
 
 #### options.map
 Type: `Boolean|Object`
