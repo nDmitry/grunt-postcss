@@ -6,7 +6,6 @@ var diff = require('diff');
 var chalk = require('chalk');
 
 module.exports = function(grunt) {
-
     var options;
     var processor;
 
@@ -125,7 +124,9 @@ module.exports = function(grunt) {
 
                 return process(input, filepath, dest).then(function(result) {
                     var warnings = result.warnings();
+
                     tally.issues += warnings.length;
+
                     warnings.forEach(function(msg) {
                         grunt.log.error(msg.toString());
                     });
@@ -134,6 +135,7 @@ module.exports = function(grunt) {
                         grunt.file.write(dest, result.css);
                         log('File ' + chalk.cyan(dest) + ' created.');
                     }
+
                     tally.sheets += 1;
 
                     if (result.map) {
@@ -145,6 +147,7 @@ module.exports = function(grunt) {
 
                         grunt.file.write(mapDest, result.map.toString());
                         log('File ' + chalk.cyan(dest + '.map') + ' created (source map).');
+
                         tally.maps += 1;
                     }
 
@@ -153,6 +156,7 @@ module.exports = function(grunt) {
 
                         grunt.file.write(diffPath, diff.createPatch(dest, input, result.css));
                         log('File ' + chalk.cyan(diffPath) + ' created (diff).');
+
                         tally.diffs += 1;
                     }
                 });
@@ -178,9 +182,9 @@ module.exports = function(grunt) {
 
             if (tally.issues) {
                 grunt.log.error(tally.issues + ' ' + grunt.util.pluralize(tally.issues, 'issue/issues') + ' found.');
+
                 if (options.failOnError) {
-                    done(false);
-                    return;
+                    return done(false);
                 }
             }
 
