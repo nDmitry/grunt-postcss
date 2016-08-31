@@ -100,11 +100,6 @@ module.exports = function(grunt) {
         processor = postcss(options.processors);
 
         var done = this.async();
-
-        if (!this.files.length) {
-            return done();
-        }
-
         var tasks = [];
 
         this.files.forEach(function(f) {
