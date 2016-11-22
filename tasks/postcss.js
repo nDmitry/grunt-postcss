@@ -142,7 +142,7 @@ module.exports = function(grunt) {
                         var mapDest = dest + '.map';
 
                         if (typeof options.map.annotation === 'string') {
-                            mapDest = getSourcemapPath(dest);
+                            mapDest = path.join(path.dirname(dest), getSourcemapPath(dest));
                         }
 
                         grunt.file.write(mapDest, result.map.toString());
