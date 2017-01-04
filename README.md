@@ -94,6 +94,13 @@ options: {
 ```
 You can also specify a path where you want the file to be saved.
 
+#### options.sequential
+Type: `Boolean`
+Default value: `false`
+
+By default grunt-postcss will load all passed CSS files and immediately process them. Set this to `true` if you want files to be processed one by one. 
+This can help in case when you have a lot of CSS files and processing them causes an `out of memory` error.
+
 #### options.failOnError
 Type: `Boolean`
 Default value: `false`

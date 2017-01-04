@@ -9,6 +9,7 @@ var maxmin = require('maxmin');
 module.exports = function(grunt) {
     var options;
     var processor;
+    var tasks;
 
     /**
      * Returns an input map contents if a custom map path was specified
@@ -55,7 +56,7 @@ module.exports = function(grunt) {
      * @param {string} input Input CSS contents
      * @param {string} from Input CSS path
      * @param {string} to Output CSS path
-     * @returns {{css: string, map: ?string}}
+     * @returns {LazyResult}
      */
     function process(input, from, to) {
         return processor.process(input, {
@@ -74,6 +75,57 @@ module.exports = function(grunt) {
     }
 
     /**
+     * Runs tasks sequentially
+     * @returns {Promise}
+     */
+    function runSequence() {
+        if (!tasks.length) {
+            return Promise.resolve();
+        }
+
+        var currentTask = tasks.shift();
+
+        return process(currentTask.input, currentTask.from, currentTask.to).then(function(result) {
+            currentTask.cb(result);
+            currentTask = null;
+            return runSequence();
+        });
+    }
+
+    /**
+     * Creates a task to be processed
+     * @param {string} input
+     * @param {string} from
+     * @param {string} to
+     * @param {Function} cb
+     * @returns {Promise|Object}
+     */
+    function createTask(input, from, to, cb) {
+        var newTask;
+
+        if (options.sequential) {
+            newTask = {
+                input: input,
+                from: from,
+                to: to,
+                cb: cb
+            };
+        } else {
+            newTask = process(input, from, to).then(cb);
+        }
+
+        return newTask;
+    }
+
+    /**
+     * Runs prepared tasks
+     * @returns {Promise}
+     */
+    function runTasks() {
+        return options.sequential ? runSequence() : Promise.all(tasks);
+    }
+
+    /**
      * @param {string} msg Log message
      */
     function log(msg) {
@@ -87,8 +139,10 @@ module.exports = function(grunt) {
             diff: false,
             safe: false,
             failOnError: false,
-            writeDest: true
+            writeDest: true,
+            sequential: false
         });
+        tasks = [];
 
         var tally = {
             sheets: 0,
@@ -107,7 +161,6 @@ module.exports = function(grunt) {
         }
 
         var done = this.async();
-        var tasks = [];
 
         this.files.forEach(function(f) {
             var src = f.src.filter(function(filepath) {
@@ -130,7 +183,7 @@ module.exports = function(grunt) {
                 var dest = f.dest || filepath;
                 var input = grunt.file.read(filepath);
 
-                return process(input, filepath, dest).then(function(result) {
+                return createTask(input, filepath, dest, function(result) {
                     var warnings = result.warnings();
 
                     tally.issues += warnings.length;
@@ -172,7 +225,7 @@ module.exports = function(grunt) {
             }));
         });
 
-        Promise.all(tasks).then(function() {
+        runTasks().then(function() {
             if (tally.sheets) {
                 if (options.writeDest) {
                     var size = chalk.dim(maxmin(tally.sizeBefore, tally.sizeAfter));
