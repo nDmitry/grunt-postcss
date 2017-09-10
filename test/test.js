@@ -38,6 +38,20 @@ exports.gruntPostcss = {
         test.done();
     },
 
+    defaultsFn: function(test) {
+        var actual = {
+            css: grunt.file.read('tmp/defaultsFn.css'),
+        };
+
+        var expected = {
+            css: grunt.file.read('test/expected/defaults.css'),
+        };
+
+        test.strictEqual(actual.css, expected.css);
+        test.ok(!grunt.file.exists('tmp/defaultsFn.css.map'));
+        test.done();
+    },
+
     mapInline: function(test) {
         var actual = {
             css: grunt.file.read('tmp/mapInline.css'),

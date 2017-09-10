@@ -2,6 +2,12 @@ var processors = [
     require('cssnano')
 ];
 
+var processorsFn = function() {
+    return [
+        require('cssnano')
+    ];
+};
+
 module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
@@ -29,6 +35,13 @@ module.exports = function(grunt) {
                 },
                 src: 'test/fixtures/a.css',
                 dest: 'tmp/defaults.css'
+            },
+            defaultsFn: {
+                options: {
+                    processors: processorsFn
+                },
+                src: 'test/fixtures/a.css',
+                dest: 'tmp/defaultsFn.css'
             },
             mapInline: {
                 options: {
