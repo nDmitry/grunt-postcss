@@ -4,6 +4,7 @@ var path = require('path');
 var postcss = require('postcss');
 var diff = require('diff');
 var chalk = require('chalk');
+var maxmin = require('maxmin');
 
 module.exports = function(grunt) {
     var options;
@@ -93,7 +94,9 @@ module.exports = function(grunt) {
             sheets: 0,
             maps: 0,
             diffs: 0,
-            issues: 0
+            issues: 0,
+            sizeBefore: 0,
+            sizeAfter: 0,
         };
 
         if (typeof options.processors === 'function') {
@@ -125,6 +128,7 @@ module.exports = function(grunt) {
             Array.prototype.push.apply(tasks, src.map(function(filepath) {
                 var dest = f.dest || filepath;
                 var input = grunt.file.read(filepath);
+                tally.sizeBefore += input.length;
 
                 return process(input, filepath, dest).then(function(result) {
                     var warnings = result.warnings();
@@ -136,8 +140,9 @@ module.exports = function(grunt) {
                     });
 
                     if (options.writeDest) {
+                        tally.sizeAfter += result.css.length;
                         grunt.file.write(dest, result.css);
-                        log('File ' + chalk.cyan(dest) + ' created.');
+                        log('File ' + chalk.cyan(dest) + ' created.' + chalk.dim(maxmin(input.length, result.css.length)));
                     }
 
                     tally.sheets += 1;
@@ -170,7 +175,8 @@ module.exports = function(grunt) {
         Promise.all(tasks).then(function() {
             if (tally.sheets) {
                 if (options.writeDest) {
-                    grunt.log.ok(tally.sheets + ' processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
+                    var size = chalk.dim(maxmin(tally.sizeBefore, tally.sizeAfter));
+                    grunt.log.ok(tally.sheets + ' processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created. ' + size);
                 } else {
                     grunt.log.ok(tally.sheets + ' ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' processed, no files written.');
                 }
