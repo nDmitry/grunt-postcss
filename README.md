@@ -23,7 +23,7 @@ grunt.loadNpmTasks('grunt-postcss');
 ## Usage
 
 ```
-$ npm - grunt-postcss autoprefixer cssnano
+$ npm i grunt-postcss autoprefixer cssnano
 ```
 
 ```js
