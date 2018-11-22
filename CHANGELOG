@@ -1,3 +1,8 @@
+v1.0.2
+    date: 2018-11-22
+    changes:
+      - PostCSS 7.0.6
+      - Drop NodeJS 0.x and 4.x
 v0.9.0
     date: 2017-09-10
     changes:
