@@ -6,7 +6,7 @@
     "name": "Dmitry Nikitenko",
     "email": "dima.nikitenko@gmail.com"
   },
-  "repository": "nDmitry/grunt-postcss",
+  "repository": "C-Lodder/grunt-postcss",
   "license": "MIT",
   "engines": {
     "node": ">= 6"
