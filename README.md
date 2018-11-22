@@ -11,7 +11,7 @@ This plugin requires Grunt `~1.0.3`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-postcss --save-dev
+npm i grunt-postcss --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
@@ -23,7 +23,7 @@ grunt.loadNpmTasks('grunt-postcss');
 ## Usage
 
 ```
-$ npm install grunt-postcss pixrem autoprefixer cssnano
+$ npm - grunt-postcss autoprefixer cssnano
 ```
 
 ```js
@@ -39,7 +39,6 @@ grunt.initConfig({
       },
 
       processors: [
-        require('pixrem')(), // add fallbacks for rem units
         require('autoprefixer')({browsers: 'last 2 versions'}), // add vendor prefixes
         require('cssnano')() // minify the result
       ]
