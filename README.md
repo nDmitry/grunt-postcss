@@ -1,12 +1,12 @@
 # grunt-postcss
-[![NPM Version](https://img.shields.io/npm/v/grunt-postcss.svg?style=flat)](https://npmjs.org/package/grunt-postcss)
-[![Build Status](https://travis-ci.org/nDmitry/grunt-postcss.png?branch=master)](https://travis-ci.org/nDmitry/grunt-postcss)
-[![Dependency Status](https://david-dm.org/nDmitry/grunt-postcss.png)](https://david-dm.org/nDmitry/grunt-postcss)
+[![NPM Version](https://img.shields.io/npm/v/@lodder/grunt-postcss.svg?style=flat)](https://npmjs.org/package/@lodder/grunt-postcss)
+[![Build Status](https://travis-ci.org/C-Lodder/grunt-postcss.png?branch=master)](https://travis-ci.org/C-Lodder/grunt-postcss)
+[![Dependency Status](https://david-dm.org/C-Lodder/grunt-postcss.png)](https://david-dm.org/C-Lodder/grunt-postcss)
 
 > Apply several post-processors to your CSS using [PostCSS](https://github.com/postcss/postcss).
 
 ## Getting Started
-This plugin requires Grunt `~0.4.0`
+This plugin requires Grunt `~1.0.3`
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
