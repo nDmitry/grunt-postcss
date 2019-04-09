@@ -123,6 +123,8 @@ module.exports = function(grunt) {
 
             tally.diffs += 1;
         }
+
+        return Promise.resolve();
     }
 
     grunt.registerMultiTask('postcss', 'Process CSS files.', function() {
@@ -149,9 +151,9 @@ module.exports = function(grunt) {
         }
 
         var done = this.async();
-        var tasks = [];
+        var taskChain;
 
-        this.files.forEach(function(f) {
+        taskChain = this.files.reduce(function(previousFileset, f) {
             var src = f.src.filter(function(filepath) {
                 if (!grunt.file.exists(filepath)) {
                     grunt.log.warn('Source file ' + chalk.cyan(filepath) + ' not found.');
@@ -165,7 +167,8 @@ module.exports = function(grunt) {
             if (src.length === 0) {
                 grunt.log.error('No source files were found.');
 
-                return done();
+                // Complete this file set, don't fail all file sets.
+                return Promise.resolve();
 
             // This check shall not apply for configs without destination
             // (in place processsing).
@@ -173,16 +176,19 @@ module.exports = function(grunt) {
                 grunt.log.warn("Multiple source files with one destination file configured. All files would write to that *one* destination file.\nThe configured file set is: " + f.src.join(", ") + " => " + f.dest + ".");
             }
 
-            Array.prototype.push.apply(tasks, src.map(function(filepath) {
-                var dest = f.dest || filepath;
-                var input = grunt.file.read(filepath);
+            return previousFileset.then(function() {
+                return src.reduce(function(previousTask, filepath) {
+                    var dest = f.dest || filepath;
+                    var input = grunt.file.read(filepath);
 
-                return process(input, filepath, dest)
-                    .then(writeResult.bind(null, tally, input, dest));
-            }));
-        });
+                    return previousTask
+                        .then(process.bind(null, input, filepath, dest))
+                        .then(writeResult.bind(null, tally, input, dest));
+                }, Promise.resolve() /* to kick-off the chain */ );
+            });
+        }, Promise.resolve() /* to kick-off the chain */ );
 
-        Promise.all(tasks).then(function() {
+        taskChain.then(function() {
             if (tally.sheets) {
                 if (options.writeDest) {
                     grunt.log.ok(tally.sheets + ' processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
