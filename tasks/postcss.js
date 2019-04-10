@@ -120,6 +120,11 @@ module.exports = function(grunt) {
                 grunt.log.error('No source files were found.');
 
                 return done();
+
+            // This check shall not apply for configs without destination
+            // (in place processsing).
+            } else if (src.length > 1 && f.dest) {
+                grunt.log.warn("Multiple source files with one destination file configured. All files would write to that *one* destination file.\nThe configured file set is: " + f.src.join(", ") + " => " + f.dest + ".");
             }
 
             Array.prototype.push.apply(tasks, src.map(function(filepath) {
