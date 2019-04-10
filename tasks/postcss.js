@@ -79,6 +79,52 @@ module.exports = function(grunt) {
         grunt.verbose.writeln(msg);
     }
 
+    /**
+     * Handle the process() promise result
+     * @param {Object} the tally status object
+     * @param {String} input the input CSS
+     * @param {String} dest the destination path
+     * @param {String} result the output CSS
+     */
+    function writeResult(tally, input, dest, result) {
+        var warnings = result.warnings();
+
+        tally.issues += warnings.length;
+
+        warnings.forEach(function(msg) {
+            grunt.log.error(msg.toString());
+        });
+
+        if (options.writeDest) {
+            grunt.file.write(dest, result.css);
+            log('File ' + chalk.cyan(dest) + ' created.');
+        }
+
+        tally.sheets += 1;
+
+        if (result.map) {
+            var mapDest = dest + '.map';
+
+            if (typeof options.map.annotation === 'string') {
+                mapDest = getSourcemapPath(dest);
+            }
+
+            grunt.file.write(mapDest, result.map.toString());
+            log('File ' + chalk.cyan(dest + '.map') + ' created (source map).');
+
+            tally.maps += 1;
+        }
+
+        if (options.diff) {
+            var diffPath = (typeof options.diff === 'string') ? options.diff : dest + '.diff';
+
+            grunt.file.write(diffPath, diff.createPatch(dest, input, result.css));
+            log('File ' + chalk.cyan(diffPath) + ' created (diff).');
+
+            tally.diffs += 1;
+        }
+    }
+
     grunt.registerMultiTask('postcss', 'Process CSS files.', function() {
         options = this.options({
             processors: [],
@@ -131,44 +177,8 @@ module.exports = function(grunt) {
                 var dest = f.dest || filepath;
                 var input = grunt.file.read(filepath);
 
-                return process(input, filepath, dest).then(function(result) {
-                    var warnings = result.warnings();
-
-                    tally.issues += warnings.length;
-
-                    warnings.forEach(function(msg) {
-                        grunt.log.error(msg.toString());
-                    });
-
-                    if (options.writeDest) {
-                        grunt.file.write(dest, result.css);
-                        log('File ' + chalk.cyan(dest) + ' created.');
-                    }
-
-                    tally.sheets += 1;
-
-                    if (result.map) {
-                        var mapDest = dest + '.map';
-
-                        if (typeof options.map.annotation === 'string') {
-                            mapDest = getSourcemapPath(dest);
-                        }
-
-                        grunt.file.write(mapDest, result.map.toString());
-                        log('File ' + chalk.cyan(dest + '.map') + ' created (source map).');
-
-                        tally.maps += 1;
-                    }
-
-                    if (options.diff) {
-                        var diffPath = (typeof options.diff === 'string') ? options.diff : dest + '.diff';
-
-                        grunt.file.write(diffPath, diff.createPatch(dest, input, result.css));
-                        log('File ' + chalk.cyan(diffPath) + ' created (diff).');
-
-                        tally.diffs += 1;
-                    }
-                });
+                return process(input, filepath, dest)
+                    .then(writeResult.bind(null, tally, input, dest));
             }));
         });
 
