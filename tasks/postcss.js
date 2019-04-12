@@ -79,6 +79,54 @@ module.exports = function(grunt) {
         grunt.verbose.writeln(msg);
     }
 
+    /**
+     * Handle the process() promise result
+     * @param {Object} the tally status object
+     * @param {String} input the input CSS
+     * @param {String} dest the destination path
+     * @param {String} result the output CSS
+     */
+    function writeResult(tally, input, dest, result) {
+        var warnings = result.warnings();
+
+        tally.issues += warnings.length;
+
+        warnings.forEach(function(msg) {
+            grunt.log.error(msg.toString());
+        });
+
+        if (options.writeDest) {
+            grunt.file.write(dest, result.css);
+            log('File ' + chalk.cyan(dest) + ' created.');
+        }
+
+        tally.sheets += 1;
+
+        if (result.map) {
+            var mapDest = dest + '.map';
+
+            if (typeof options.map.annotation === 'string') {
+                mapDest = getSourcemapPath(dest);
+            }
+
+            grunt.file.write(mapDest, result.map.toString());
+            log('File ' + chalk.cyan(dest + '.map') + ' created (source map).');
+
+            tally.maps += 1;
+        }
+
+        if (options.diff) {
+            var diffPath = (typeof options.diff === 'string') ? options.diff : dest + '.diff';
+
+            grunt.file.write(diffPath, diff.createPatch(dest, input, result.css));
+            log('File ' + chalk.cyan(diffPath) + ' created (diff).');
+
+            tally.diffs += 1;
+        }
+
+        return Promise.resolve();
+    }
+
     grunt.registerMultiTask('postcss', 'Process CSS files.', function() {
         options = this.options({
             processors: [],
@@ -103,9 +151,9 @@ module.exports = function(grunt) {
         }
 
         var done = this.async();
-        var tasks = [];
+        var taskChain;
 
-        this.files.forEach(function(f) {
+        taskChain = this.files.reduce(function(previousFileset, f) {
             var src = f.src.filter(function(filepath) {
                 if (!grunt.file.exists(filepath)) {
                     grunt.log.warn('Source file ' + chalk.cyan(filepath) + ' not found.');
@@ -119,55 +167,28 @@ module.exports = function(grunt) {
             if (src.length === 0) {
                 grunt.log.error('No source files were found.');
 
-                return done();
+                // Complete this file set, don't fail all file sets.
+                return Promise.resolve();
+
+            // This check shall not apply for configs without destination
+            // (in place processsing).
+            } else if (src.length > 1 && f.dest) {
+                grunt.log.warn("Multiple source files with one destination file configured. All files would write to that *one* destination file.\nThe configured file set is: " + f.src.join(", ") + " => " + f.dest + ".");
             }
 
-            Array.prototype.push.apply(tasks, src.map(function(filepath) {
-                var dest = f.dest || filepath;
-                var input = grunt.file.read(filepath);
+            return previousFileset.then(function() {
+                return src.reduce(function(previousTask, filepath) {
+                    var dest = f.dest || filepath;
+                    var input = grunt.file.read(filepath);
 
-                return process(input, filepath, dest).then(function(result) {
-                    var warnings = result.warnings();
+                    return previousTask
+                        .then(process.bind(null, input, filepath, dest))
+                        .then(writeResult.bind(null, tally, input, dest));
+                }, Promise.resolve() /* to kick-off the chain */ );
+            });
+        }, Promise.resolve() /* to kick-off the chain */ );
 
-                    tally.issues += warnings.length;
-
-                    warnings.forEach(function(msg) {
-                        grunt.log.error(msg.toString());
-                    });
-
-                    if (options.writeDest) {
-                        grunt.file.write(dest, result.css);
-                        log('File ' + chalk.cyan(dest) + ' created.');
-                    }
-
-                    tally.sheets += 1;
-
-                    if (result.map) {
-                        var mapDest = dest + '.map';
-
-                        if (typeof options.map.annotation === 'string') {
-                            mapDest = getSourcemapPath(dest);
-                        }
-
-                        grunt.file.write(mapDest, result.map.toString());
-                        log('File ' + chalk.cyan(dest + '.map') + ' created (source map).');
-
-                        tally.maps += 1;
-                    }
-
-                    if (options.diff) {
-                        var diffPath = (typeof options.diff === 'string') ? options.diff : dest + '.diff';
-
-                        grunt.file.write(diffPath, diff.createPatch(dest, input, result.css));
-                        log('File ' + chalk.cyan(diffPath) + ' created (diff).');
-
-                        tally.diffs += 1;
-                    }
-                });
-            }));
-        });
-
-        Promise.all(tasks).then(function() {
+        taskChain.then(function() {
             if (tally.sheets) {
                 if (options.writeDest) {
                     grunt.log.ok(tally.sheets + ' processed ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
