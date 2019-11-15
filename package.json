@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "chalk": "^2.1.0",
-    "diff": "^3.5.0",
+    "diff": "^4.0.1",
     "postcss": "^6.0.11"
   },
   "devDependencies": {
